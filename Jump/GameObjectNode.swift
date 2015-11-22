@@ -69,6 +69,9 @@ class StarNode: GameObjectNode {
         
         // Award score
         GameState.sharedInstance.score += (starType == .Normal ? 20 : 100)
+        
+        // Award stars
+        GameState.sharedInstance.stars += (starType == .Normal ? 1 : 5)
 
         
         // The HUD needs updating to show the new stars and score

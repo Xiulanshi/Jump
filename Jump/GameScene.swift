@@ -47,6 +47,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var lblScore: SKLabelNode!
     var lblStars: SKLabelNode!
     
+    // Max y reached by player
+    var maxPlayerY: Int!
+    
     // Second Step: This is the blank canvas onto which you’ll add your game nodes.
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -64,6 +67,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // The graphics are sized for the standard 320-point width of most iPhone models, so the scale factor here will help with the conversion on other screen sizes.
         scaleFactor = self.size.width / 320.0
+        
+        // Reset
+        maxPlayerY = 80
         
         // Create the game nodes
         // Background
@@ -444,6 +450,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(currentTime: NSTimeInterval) {
+        // New max height ?
+        // 1
+        // check whether the player node has travelled higher than it has yet travelled in this play-through
+        if Int(player.position.y) > maxPlayerY! {
+            // 2
+            // add to the score the difference between the player node’s current y-coordinate and the max y-value
+            GameState.sharedInstance.score += Int(player.position.y) - maxPlayerY!
+            // 3
+            // set the new max y-value
+            maxPlayerY = Int(player.position.y)
+            // 4
+            // update the score label with the new score
+            lblScore.text = String(format: "%d", GameState.sharedInstance.score)
+        }
+        
+        // Remove game objects that have passed by
+        foregroundNode.enumerateChildNodesWithName("NODE_PLATFORM", usingBlock: {
+            (node, stop) in
+            let platform = node as! PlatformNode
+            platform.checkNodeRemoval(self.player.position.y)
+        })
+        
+        foregroundNode.enumerateChildNodesWithName("NODE_STAR", usingBlock: {
+            (node, stop) in
+            let star = node as! StarNode
+            star.checkNodeRemoval(self.player.position.y)
+        })
+        
         // Calculate player y offset
         if player.position.y > 200.0 {
             backgroundNode.position = CGPoint(x: 0.0, y: -((player.position.y - 200.0)/10))
