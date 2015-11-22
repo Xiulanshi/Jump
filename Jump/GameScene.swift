@@ -140,5 +140,25 @@ class GameScene: SKScene {
         return playerNode
     }
     
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        // 1
+        // If we're already playing, ignore touches
+        if player.physicsBody!.dynamic {
+            return
+        }
+        
+        // 2
+        // Remove the Tap to Start node
+        tapToStartNode.removeFromParent()
+        
+        // 3
+        // Start the player by putting them into the physics simulation
+        player.physicsBody?.dynamic = true
+        
+        // 4
+        player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 20.0))
+    }
+
+    
     
 }
