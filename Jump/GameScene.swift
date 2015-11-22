@@ -9,8 +9,21 @@
 import SpriteKit
 
 class GameScene: SKScene {
+    // Layered Nodes
     
-    // To Accommodate iPhone 6
+    // Background: a slow-moving layer that shows the distant landscape.
+    var backgroundNode: SKNode!
+    
+    // Midground: faster-moving scenery made up of tree branches.
+    var midgroundNode: SKNode!
+    
+    // Foreground: the fastest layer, containing the player character, stars and platforms that make up the core of the gameplay.
+    var foregroundNode: SKNode!
+    
+    // HUD: the top layer that does not move and displays the score labels.
+    var hudNode: SKNode!
+    
+    // To Accommodate iPhone 6 -- This ensures that your graphics are scaled and positioned properly across all iPhone models.
     var scaleFactor: CGFloat!
     
     // Second Step: This is the blank canvas onto which you’ll add your game nodes.
