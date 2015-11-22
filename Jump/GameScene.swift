@@ -59,6 +59,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundNode = createBackgroundNode()
         addChild(backgroundNode)
         
+        // Midground
+        midgroundNode = createMidgroundNode()
+        addChild(midgroundNode)
+        
         // Foreground
         foregroundNode = SKNode()
         addChild(foregroundNode)
@@ -337,6 +341,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         node.physicsBody?.collisionBitMask = 0
         
         return node
+    }
+    
+    func createMidgroundNode() -> SKNode {
+        // Create the node
+        let theMidgroundNode = SKNode()
+        var anchor: CGPoint!
+        var xPosition: CGFloat!
+        
+        // 1
+        // Add some branches to the midground
+        for index in 0...9 {
+            var spriteName: String
+            // 2
+            // There are two different branch images, one showing branches coming in from the left of the screen and the other from the right.
+            let r = arc4random() % 2
+            if r > 0 {
+                spriteName = "BranchRight"
+                anchor = CGPoint(x: 1.0, y: 0.5)
+                xPosition = self.size.width
+            } else {
+                spriteName = "BranchLeft"
+                anchor = CGPoint(x: 0.0, y: 0.5)
+                xPosition = 0.0
+            }
+            // 3
+            // space the branches at 500-point intervals on the y-axis of the midground node
+            let branchNode = SKSpriteNode(imageNamed: spriteName)
+            branchNode.anchorPoint = anchor
+            branchNode.position = CGPoint(x: xPosition, y: 500.0 * CGFloat(index))
+            theMidgroundNode.addChild(branchNode)
+        }
+        
+        // Return the completed midground node
+        return theMidgroundNode
     }
 
     
