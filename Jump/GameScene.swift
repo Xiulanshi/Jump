@@ -375,7 +375,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Update the HUD if necessary
         if updateHUD {
-            // 4 TODO: Update HUD in Part 2
+            lblStars.text = String(format: "X %d", GameState.sharedInstance.stars)
+            lblScore.text = String(format: "%d", GameState.sharedInstance.score)
         }
     }
     
