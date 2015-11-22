@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -35,6 +36,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Height at which level ends
     var endLevelY = 0
+    
+    // Motion manager for accelerometer
+    let motionManager = CMMotionManager()
+    
+    // Acceleration value from accelerometer
+    var xAcceleration: CGFloat = 0.0
     
     // Second Step: This is the blank canvas onto which you’ll add your game nodes.
     required init?(coder aDecoder: NSCoder) {
@@ -144,6 +151,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Tap to Start
         tapToStartNode.position = CGPoint(x: self.size.width / 2, y: 180.0)
         hudNode.addChild(tapToStartNode)
+        
+        // CoreMotion
+        // 1
+        // accelerometerUpdateInterval defines the number of seconds between updates from the accelerometer. A value of 0.2 produces a smooth update rate for accelerometer changes.
+        motionManager.accelerometerUpdateInterval = 0.2
+        
+        // 2
+        // enable the accelerometer and provide a block of code to execute upon every accelerometer update.
+        motionManager.startAccelerometerUpdatesToQueue(NSOperationQueue.currentQueue()!, withHandler:
+            {
+                (accelerometerData: CMAccelerometerData?, error: NSError?) in
+                // 3 
+                // get the acceleration details from the latest accelerometer data passed into the block
+                let acceleration = accelerometerData!.acceleration
+                // 4
+                // calculate the player node’s x-axis acceleration. could use the x-value directly from the accelerometer data, but get much smoother movement using a value derived from three quarters of the accelerometer’s x-axis acceleration (say that three times fast!) and one quarter of the current x-axis acceleration.
+                self.xAcceleration = (CGFloat(acceleration.x) * 0.75) + (self.xAcceleration * 0.25)
+            })
         
     }
     
@@ -385,6 +410,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             foregroundNode.position = CGPoint(x: 0.0, y: -(player.position.y - 200.0))
         }
     }
+    
+    override func didSimulatePhysics() {
+        // 1
+        // Set velocity based on x-axis acceleration
+        player.physicsBody?.velocity = CGVector(dx: xAcceleration * 400.0, dy: player.physicsBody!.velocity.dy)
+        // 2
+        // Check x bounds
+        if player.position.x < -20.0 {
+            player.position = CGPoint(x: self.size.width + 20.0, y: player.position.y)
+        } else if (player.position.x > self.size.width + 20.0) {
+            player.position = CGPoint(x: -20.0, y: player.position.y)
+        }
+    }
+
 
     
     
