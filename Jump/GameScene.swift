@@ -33,7 +33,15 @@ class GameScene: SKScene {
     
     override init(size: CGSize) {
         super.init(size: size)
-        backgroundColor = SKColor.whiteColor()  
+        backgroundColor = SKColor.whiteColor()
+        
+        // The graphics are sized for the standard 320-point width of most iPhone models, so the scale factor here will help with the conversion on other screen sizes.
+        scaleFactor = self.size.width / 320.0
+        
+        // Create the game nodes
+        // Background
+        backgroundNode = createBackgroundNode()
+        addChild(backgroundNode)
     }
     
     // First add the background node
@@ -57,7 +65,7 @@ class GameScene: SKScene {
             // Changing each node’s anchor point to its bottom center makes it easy to stack in sections.
             node.setScale(scaleFactor)
             node.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-            node.position = CGPoint(x: self.size.width, y: ySpacing * CGFloat(index))
+            node.position = CGPoint(x: self.size.width / 2, y: ySpacing * CGFloat(index))
             
             // 5
             // Add each child node to the background node.
