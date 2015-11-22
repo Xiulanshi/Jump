@@ -43,6 +43,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Acceleration value from accelerometer
     var xAcceleration: CGFloat = 0.0
     
+    // Labels for score and stars
+    var lblScore: SKLabelNode!
+    var lblStars: SKLabelNode!
+    
     // Second Step: This is the blank canvas onto which you’ll add your game nodes.
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -151,6 +155,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Tap to Start
         tapToStartNode.position = CGPoint(x: self.size.width / 2, y: 180.0)
         hudNode.addChild(tapToStartNode)
+        
+        // Build the HUD
+        
+        // Stars
+        // 1
+        // add a star graphic in the top-left corner of the scene to tell the player that the following number is the collected star count.
+        let star = SKSpriteNode(imageNamed: "Star")
+        star.position = CGPoint(x: 25, y: self.size.height-30)
+        hudNode.addChild(star)
+        
+        // 2
+        // place a left-aligned SKLabelNode
+        lblStars = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
+        lblStars.fontSize = 30
+        lblStars.fontColor = SKColor.whiteColor()
+        lblStars.position = CGPoint(x: 50, y: self.size.height-40)
+        lblStars.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Left
+        
+        // 3
+        // initialize the label with the number of stars from GameState
+        lblStars.text = String(format: "X %d", GameState.sharedInstance.stars)
+        hudNode.addChild(lblStars)
+        
+        // Score
+        // 4
+        //add a right-aligned SKLabelNode in the top-right corner of the scene
+        lblScore = SKLabelNode(fontNamed: "ChalkboardSE-Bold")
+        lblScore.fontSize = 30
+        lblScore.fontColor = SKColor.whiteColor()
+        lblScore.position = CGPoint(x: self.size.width-20, y: self.size.height-40)
+        lblScore.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Right
+        
+        // 5
+        // initialize that label to zero
+        lblScore.text = "0"
+        hudNode.addChild(lblScore)
         
         // CoreMotion
         // 1
