@@ -33,6 +33,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Tap To Start node
     let tapToStartNode = SKSpriteNode(imageNamed: "TapToStart")
     
+    // Height at which level ends
+    var endLevelY = 0
+    
     // Second Step: This is the blank canvas onto which you’ll add your game nodes.
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -64,13 +67,71 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hudNode = SKNode()
         addChild(hudNode)
         
-        // Add a platform
-        let platform = createPlatformAtPosition(CGPoint(x: 160, y: 320), ofType: .Normal)
-        foregroundNode.addChild(platform)
+        // Load the level
+        let levelPlist = NSBundle.mainBundle().pathForResource("Level01", ofType: "plist")
+        let levelData = NSDictionary(contentsOfFile: levelPlist!)!
         
-        // Add a star
-        let star = createStarAtPosition(CGPoint(x: 160, y: 220), ofType: .Special)
-        foregroundNode.addChild(star)
+        // Height at which the player ends the level
+        endLevelY = levelData["EndY"]!.integerValue!
+        
+//        // Add a platform
+//        let platform = createPlatformAtPosition(CGPoint(x: 160, y: 320), ofType: .Normal)
+//        foregroundNode.addChild(platform)
+        
+        // Add the platforms -- Load the platform dictionary from levelData
+        let platforms = levelData["Platforms"] as! NSDictionary
+        let platformPatterns = platforms["Patterns"] as! NSDictionary
+        let platformPositions = platforms["Positions"] as! [NSDictionary]
+        
+        // Loop through the position array
+        for platformPosition in platformPositions {
+            let patternX = platformPosition["x"]?.floatValue
+            let patternY = platformPosition["y"]?.floatValue
+            let pattern = platformPosition["pattern"] as! NSString
+            
+            // Look up the pattern
+            let platformPattern = platformPatterns[pattern] as! [NSDictionary]
+            
+            // For each item in the array, load the relevant pattern and instantiate a PlatformNode of the correct type at the specified (x, y) positions.
+            for platformPoint in platformPattern {
+                let x = platformPoint["x"]?.floatValue
+                let y = platformPoint["y"]?.floatValue
+                let type = PlatformType(rawValue: platformPoint["type"]!.integerValue)
+                let positionX = CGFloat(x! + patternX!)
+                let positionY = CGFloat(y! + patternY!)
+                let platformNode = createPlatformAtPosition(CGPoint(x: positionX, y: positionY), ofType: type!)
+                
+                // Add all platformNode to the foregroundNode
+                foregroundNode.addChild(platformNode)
+            }
+        }
+        
+//        // Add a star
+//        let star = createStarAtPosition(CGPoint(x: 160, y: 220), ofType: .Special)
+//        foregroundNode.addChild(star)
+        
+        // Add the stars
+        let stars = levelData["Stars"] as! NSDictionary
+        let starPatterns = stars["Patterns"] as! NSDictionary
+        let starPositions = stars["Positions"] as! [NSDictionary]
+        
+        for starPosition in starPositions {
+            let patternX = starPosition["x"]?.floatValue
+            let patternY = starPosition["y"]?.floatValue
+            let pattern = starPosition["pattern"] as! NSString
+            
+            // Look up the pattern
+            let starPattern = starPatterns[pattern] as! [NSDictionary]
+            for starPoint in starPattern {
+                let x = starPoint["x"]?.floatValue
+                let y = starPoint["y"]?.floatValue
+                let type = StarType(rawValue: starPoint["type"]!.integerValue)
+                let positionX = CGFloat(x! + patternX!)
+                let positionY = CGFloat(y! + patternY!)
+                let starNode = createStarAtPosition(CGPoint(x: positionX, y: positionY), ofType: type!)
+                foregroundNode.addChild(starNode)
+            }
+        }
         
         // Add the player
         player = createPlayer()
