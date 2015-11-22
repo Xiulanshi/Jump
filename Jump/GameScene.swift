@@ -156,6 +156,7 @@ class GameScene: SKScene {
         player.physicsBody?.dynamic = true
         
         // 4
+        // Give the player node an initial upward impulse to get them started
         player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 20.0))
     }
 
