@@ -38,6 +38,9 @@ class GameScene: SKScene {
         super.init(size: size)
         backgroundColor = SKColor.whiteColor()
         
+        // Add some gravity -- Gravity has no influence along the x-axis, but produces a downward force along the y-axis.
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -2.0)
+        
         // The graphics are sized for the standard 320-point width of most iPhone models, so the scale factor here will help with the conversion on other screen sizes.
         scaleFactor = self.size.width / 320.0
         
