@@ -38,7 +38,7 @@ class GameScene: SKScene {
         super.init(size: size)
         backgroundColor = SKColor.whiteColor()
         
-        // Add some gravity -- Gravity has no influence along the x-axis, but produces a downward force along the y-axis.
+        //Third Add some gravity -- Gravity has no influence along the x-axis, but produces a downward force along the y-axis.
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -2.0)
         
         // The graphics are sized for the standard 320-point width of most iPhone models, so the scale factor here will help with the conversion on other screen sizes.
@@ -104,6 +104,27 @@ class GameScene: SKScene {
         let sprite = SKSpriteNode(imageNamed: "Player")
         playerNode.addChild(sprite)
         
+        // 1 
+        // Each physics body needs a shape that the physics engine can use to test for collisions. The most efficient body shape to use in collision detection is a circle (easier to detect if overlaps another circle), and fortunately a circle fits the player node very well. The radius of the circle is half the width of the sprite.
+        playerNode.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2)
+        
+        // 2
+        // Physics bodies can be static or dynamic. Dynamic bodies are influenced by the physics engine and are thus affected by forces and impulses. Static bodies are not, but can still use them in collision detection. A static body such as a wall or a solid platform will never move, but things can bump into it. Since we want the player node to be affected by gravity, you set its dynamic property to true.
+        playerNode.physicsBody?.dynamic = true
+        
+        // 3
+        // the player node need to remain upright at all times and so disable rotation of the node.
+        playerNode.physicsBody?.allowsRotation = false
+        
+        // 4
+        // Adjust the settings on the player node’s physics body so that it has no friction or damping. However, set its restitution to 1, which means the physics body will not lose any of its momentum during collisions.
+        playerNode.physicsBody?.restitution = 1.0
+        playerNode.physicsBody?.friction = 0.0
+        playerNode.physicsBody?.angularDamping = 0.0
+        playerNode.physicsBody?.linearDamping = 0.0
+        
         return playerNode
     }
+    
+    
 }
