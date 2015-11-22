@@ -10,38 +10,49 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-//    // Second Step: This is the blank canvas onto which you’ll add your game nodes.
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//    }
-//    
-//    override init(size: CGSize) {
-//        super.init(size: size)
-//        backgroundColor = SKColor.whiteColor()  
-//    }
-//    
-//    // First add the background node
-//    
-//    func createBackgroundNode() -> SKNode {
-//        // 1
-//        // Create the node
-//        let backgroundNode = SKNode()
-//        let ySpacing = 64.0 * scaleFactor
-//        
-//        // 2
-//        // Go through images until the entire background is built
-//        for index in 0...19 {
-//            //3
-//            let node = SKSpriteNode(imageNamed:String(format: "Background%02d", index + 1))
-//            //4
-//            node.setScale(scaleFactor)
-//            node.anchorPoint = CGPoint(x: 0.5, y: 0.0)
-//            node.position = CGPoint(x: self.size.width, y: ySpacing * CGFloat(index))
-//            //5
-//            backgroundNode.addChild(node)
-//        }
-//        
-//        //6
-//        //Return the completed background node
-//    }
+    // To Accommodate iPhone 6
+    var scaleFactor: CGFloat!
+    
+    // Second Step: This is the blank canvas onto which you’ll add your game nodes.
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    override init(size: CGSize) {
+        super.init(size: size)
+        backgroundColor = SKColor.whiteColor()  
+    }
+    
+    // First add the background node
+    
+    func createBackgroundNode() -> SKNode {
+        // 1 
+        // Create the node. SKNode’s have no visual content, but do have a position in the scene. This means you can move the node around and its child nodes will move with it.
+
+        let backgroundNode = SKNode()
+        let ySpacing = 64.0 * scaleFactor
+        
+        // 2
+        // Go through images until the entire background is built
+        for index in 0...19 {
+            
+            // 3
+            // Each child node is made up of an SKSpriteNode with the sequential background image loaded from your resources.
+            let node = SKSpriteNode(imageNamed:String(format: "Background%02d", index + 1))
+            
+            // 4
+            // Changing each node’s anchor point to its bottom center makes it easy to stack in sections.
+            node.setScale(scaleFactor)
+            node.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+            node.position = CGPoint(x: self.size.width, y: ySpacing * CGFloat(index))
+            
+            // 5
+            // Add each child node to the background node.
+            backgroundNode.addChild(node)
+        }
+        
+        // 6
+        // Return the completed background node
+        return backgroundNode
+    }
 }
