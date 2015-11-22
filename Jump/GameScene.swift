@@ -50,6 +50,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Max y reached by player
     var maxPlayerY: Int!
     
+    // Game over
+    var gameOver = false
+    
     // Second Step: This is the blank canvas onto which you’ll add your game nodes.
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -70,6 +73,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Reset
         maxPlayerY = 80
+        GameState.sharedInstance.score = 0
+        gameOver = false
         
         // Create the game nodes
         // Background
@@ -450,6 +455,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(currentTime: NSTimeInterval) {
+        if gameOver {
+            return
+        }
+        
         // New max height ?
         // 1
         // check whether the player node has travelled higher than it has yet travelled in this play-through
@@ -484,6 +493,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             midgroundNode.position = CGPoint(x: 0.0, y: -((player.position.y - 200.0)/4))
             foregroundNode.position = CGPoint(x: 0.0, y: -(player.position.y - 200.0))
         }
+        
+        // 1
+        // Check if we've finished the level
+        if Int(player.position.y) > endLevelY {
+            endGame()
+        }
+        
+        // 2
+        // Check if we've fallen too far
+        if Int(player.position.y) < maxPlayerY - 800 {
+            endGame()
+        }
     }
     
     override func didSimulatePhysics() {
@@ -497,6 +518,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if (player.position.x > self.size.width + 20.0) {
             player.position = CGPoint(x: -20.0, y: player.position.y)
         }
+    }
+    
+    func endGame() {
+        // 1
+        // set gameOver to true
+        gameOver = true
+        
+        // 2
+        // Save stars and high score
+        GameState.sharedInstance.saveState()
+        
+        // 3
+        // instantiate an EndGameScene and transition to it by fading over a period of 0.5 seconds
+        let reveal = SKTransition.fadeWithDuration(0.5)
+        let endGameScene = EndGameScene(size: self.size)
+        self.view!.presentScene(endGameScene, transition: reveal)
     }
 
 
