@@ -376,6 +376,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Return the completed midground node
         return theMidgroundNode
     }
+    
+    override func update(currentTime: NSTimeInterval) {
+        // Calculate player y offset
+        if player.position.y > 200.0 {
+            backgroundNode.position = CGPoint(x: 0.0, y: -((player.position.y - 200.0)/10))
+            midgroundNode.position = CGPoint(x: 0.0, y: -((player.position.y - 200.0)/4))
+            foregroundNode.position = CGPoint(x: 0.0, y: -(player.position.y - 200.0))
+        }
+    }
 
     
     
