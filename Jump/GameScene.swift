@@ -65,7 +65,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(hudNode)
         
         // Add a star
-        let star = createStarAtPosition(CGPoint(x: 160, y: 220))
+        let star = createStarAtPosition(CGPoint(x: 160, y: 220), ofType: .Special)
         foregroundNode.addChild(star)
         
         // Add the player
@@ -185,7 +185,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 20.0))
     }
     
-    func createStarAtPosition(position: CGPoint) -> StarNode {
+    func createStarAtPosition(position: CGPoint, ofType type: StarType) -> StarNode {
         // 1
         // instantiate StarNode and set it position
         let node = StarNode()
@@ -195,8 +195,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // 2
         // Assign the star's graphic using an SKSpriteNode mode
+//        var sprite: SKSpriteNode
+//        sprite = SKSpriteNode(imageNamed: "Star")
+//        node.addChild(sprite)
+        
+        // Set the star type and assign the graphic
+        node.starType = type
         var sprite: SKSpriteNode
-        sprite = SKSpriteNode(imageNamed: "Star")
+        if type == .Special {
+            sprite = SKSpriteNode(imageNamed: "StarSpecial")
+        } else {
+            sprite = SKSpriteNode(imageNamed: "Star")
+        }
         node.addChild(sprite)
         
         // 3

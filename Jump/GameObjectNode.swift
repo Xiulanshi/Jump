@@ -15,6 +15,13 @@ struct CollisionCategoryBitmask {
     static let Platform: UInt32 = 0x02
 }
 
+// Identify the StarType
+enum StarType: Int {
+    case Normal = 0
+    case Special
+}
+
+
 class GameObjectNode: SKNode {
     
     //call collisionWithPlayer whenever the player node collides with this object
@@ -35,6 +42,9 @@ class GameObjectNode: SKNode {
 
 // Add the Star Class
 class StarNode: GameObjectNode {
+    // Store the starType
+    var starType: StarType!
+    
     override func collisionWithPlayer(player: SKNode) -> Bool {
         // Boost the player up
         player.physicsBody?.velocity = CGVector(dx: player.physicsBody!.velocity.dx, dy: 400.0)
