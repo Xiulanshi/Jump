@@ -61,6 +61,7 @@
 		D907ADF51C015A76005D30A9 /* GameObjectNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D907ADF41C015A76005D30A9 /* GameObjectNode.swift */; };
 		D907ADF71C016671005D30A9 /* StarPing.wav in Resources */ = {isa = PBXBuildFile; fileRef = D907ADF61C016671005D30A9 /* StarPing.wav */; };
 		D907ADF91C02161A005D30A9 /* Level01.plist in Resources */ = {isa = PBXBuildFile; fileRef = D907ADF81C02161A005D30A9 /* Level01.plist */; };
+		D907ADFB1C0226F2005D30A9 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D907ADFA1C0226F2005D30A9 /* GameState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 		D907ADF41C015A76005D30A9 /* GameObjectNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameObjectNode.swift; sourceTree = "<group>"; };
 		D907ADF61C016671005D30A9 /* StarPing.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = StarPing.wav; path = ../StarPing.wav; sourceTree = "<group>"; };
 		D907ADF81C02161A005D30A9 /* Level01.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Level01.plist; sourceTree = "<group>"; };
+		D907ADFA1C0226F2005D30A9 /* GameState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +199,7 @@
 				D907AD691C013A67005D30A9 /* AppDelegate.swift */,
 				D907AD6D1C013A67005D30A9 /* GameScene.swift */,
 				D907ADF41C015A76005D30A9 /* GameObjectNode.swift */,
+				D907ADFA1C0226F2005D30A9 /* GameState.swift */,
 				D907AD6F1C013A67005D30A9 /* GameViewController.swift */,
 				D907AD711C013A67005D30A9 /* Main.storyboard */,
 				D907AD741C013A67005D30A9 /* Assets.xcassets */,
@@ -455,6 +458,7 @@
 			files = (
 				D907AD6E1C013A67005D30A9 /* GameScene.swift in Sources */,
 				D907AD701C013A67005D30A9 /* GameViewController.swift in Sources */,
+				D907ADFB1C0226F2005D30A9 /* GameState.swift in Sources */,
 				D907ADF51C015A76005D30A9 /* GameObjectNode.swift in Sources */,
 				D907AD6A1C013A67005D30A9 /* AppDelegate.swift in Sources */,
 			);
