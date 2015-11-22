@@ -23,6 +23,9 @@ class GameScene: SKScene {
     // HUD: the top layer that does not move and displays the score labels.
     var hudNode: SKNode!
     
+    // Player
+    var player: SKNode!
+    
     // To Accommodate iPhone 6 -- This ensures that your graphics are scaled and positioned properly across all iPhone models.
     var scaleFactor: CGFloat!
     
@@ -42,6 +45,15 @@ class GameScene: SKScene {
         // Background
         backgroundNode = createBackgroundNode()
         addChild(backgroundNode)
+        
+        // Foreground
+        foregroundNode = SKNode()
+        addChild(foregroundNode)
+        
+        // Add the player
+        player = createPlayer()
+        foregroundNode.addChild(player)
+        
     }
     
     // First add the background node
