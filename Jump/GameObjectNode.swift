@@ -21,6 +21,12 @@ enum StarType: Int {
     case Special
 }
 
+// Identify the PlatformType
+enum PlatformType: Int {
+    case Normal = 0
+    case Break
+}
+
 
 class GameObjectNode: SKNode {
     
@@ -63,5 +69,29 @@ class StarNode: GameObjectNode {
         
         // The HUD needs updating to show the new stars and score
         return true
+    }
+}
+
+class PlatformNode: GameObjectNode {
+    var platformType: PlatformType!
+    
+    override func collisionWithPlayer(player: SKNode) -> Bool {
+        // 1
+        // Only bounce the player if he's falling
+        if player.physicsBody?.velocity.dy < 0 {
+            // 2
+            //  give the player node a vertical boost to make it bounce off the platform, accomplish this the same way you did for the star, but with a less powerful boost.
+            player.physicsBody?.velocity = CGVector(dx: player.physicsBody!.velocity.dx, dy: 250.0)
+            
+            // 3
+            // Remove if it is a Break type platform
+            if platformType == .Break {
+                self.removeFromParent()
+            }
+        }
+        
+        // 4
+        // No stars for platforms
+        return false
     }
 }

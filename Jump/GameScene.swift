@@ -64,6 +64,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hudNode = SKNode()
         addChild(hudNode)
         
+        // Add a platform
+        let platform = createPlatformAtPosition(CGPoint(x: 160, y: 320), ofType: .Normal)
+        foregroundNode.addChild(platform)
+        
         // Add a star
         let star = createStarAtPosition(CGPoint(x: 160, y: 220), ofType: .Special)
         foregroundNode.addChild(star)
@@ -243,6 +247,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if updateHUD {
             // 4 TODO: Update HUD in Part 2
         }
+    }
+    
+    func createPlatformAtPosition(position: CGPoint, ofType type: PlatformType) -> PlatformNode {
+        // 1
+        // instantiate the PlatformNode and set its position, name and type.
+        let node = PlatformNode()
+        let thePosition = CGPoint(x: position.x * scaleFactor, y: position.y)
+        node.position = thePosition
+        node.name = "NODE_PLATFORM"
+        node.platformType = type
+        
+        // 2
+        // choose the correct graphic for the SKSpriteNode based on the platform type.
+        var sprite: SKSpriteNode
+        if type == .Break {
+            sprite = SKSpriteNode(imageNamed: "PlatformBreak")
+        } else {
+            sprite = SKSpriteNode(imageNamed: "Platform")
+        }
+        node.addChild(sprite)
+        
+        // 3
+        // set up the platform’s physics, including its collision category.
+        node.physicsBody = SKPhysicsBody(rectangleOfSize: sprite.size)
+        node.physicsBody?.dynamic = false
+        node.physicsBody?.categoryBitMask = CollisionCategoryBitmask.Platform
+        node.physicsBody?.collisionBitMask = 0
+        
+        return node
     }
 
     
