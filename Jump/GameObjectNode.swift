@@ -8,6 +8,13 @@
 
 import SpriteKit
 
+// Define categories
+struct CollisionCategoryBitmask {
+    static let Player: UInt32 = 0x00
+    static let Star: UInt32 = 0x01
+    static let Platform: UInt32 = 0x02
+}
+
 class GameObjectNode: SKNode {
     
     //call collisionWithPlayer whenever the player node collides with this object

@@ -8,9 +8,7 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
-    // Tap To Start node
-    let tapToStartNode = SKSpriteNode(imageNamed: "TapToStart")
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Layered Nodes
     
@@ -32,6 +30,9 @@ class GameScene: SKScene {
     // To Accommodate iPhone 6 -- This ensures that your graphics are scaled and positioned properly across all iPhone models.
     var scaleFactor: CGFloat!
     
+    // Tap To Start node
+    let tapToStartNode = SKSpriteNode(imageNamed: "TapToStart")
+    
     // Second Step: This is the blank canvas onto which you’ll add your game nodes.
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -43,6 +44,9 @@ class GameScene: SKScene {
         
         //Third Add some gravity -- Gravity has no influence along the x-axis, but produces a downward force along the y-axis.
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -2.0)
+        
+        // Set contact delegate
+        physicsWorld.contactDelegate = self
         
         // The graphics are sized for the standard 320-point width of most iPhone models, so the scale factor here will help with the conversion on other screen sizes.
         scaleFactor = self.size.width / 320.0
@@ -141,6 +145,23 @@ class GameScene: SKScene {
         playerNode.physicsBody?.angularDamping = 0.0
         playerNode.physicsBody?.linearDamping = 0.0
         
+        
+        // 1
+        // Since this is a fast-moving game, ask Sprite Kit to use precise collision detection for the player node’s physics body. After all, the gameplay for Uber Jump is all about the player node’s collisions, so want it to be as accurate as possible!
+        playerNode.physicsBody?.usesPreciseCollisionDetection = true
+        
+        // 2
+        // This defines the physics body’s category bit mask
+        playerNode.physicsBody?.categoryBitMask = CollisionCategoryBitmask.Player
+        
+        // 3
+        // By setting collisionBitMask to zero, tell Sprite Kit that we don't want its physics engine to simulate any collisions for the player node. That’s because we’re going to handle those collisions ourselves!
+        playerNode.physicsBody?.collisionBitMask = 0
+        
+        // 4
+        // Want to be informed when the player node touches any stars or platforms.
+        playerNode.physicsBody?.contactTestBitMask = CollisionCategoryBitmask.Star | CollisionCategoryBitmask.Platform
+        
         return playerNode
     }
     
@@ -186,7 +207,32 @@ class GameScene: SKScene {
         // Make the physics body static, because don’t want gravity or any other physics simulation to influence the stars.
         node.physicsBody?.dynamic = false
         
+        // assign the star’s category and clear its collisionBitMask so it won’t collide with anything
+        node.physicsBody?.categoryBitMask = CollisionCategoryBitmask.Star
+        node.physicsBody?.collisionBitMask = 0
+        
         return node
+    }
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        // 1
+        // initialize the updateHUD flag, which we will use at the end of the method to determine whether or not to update the HUD for collisions that result in points.
+        var updateHUD = false
+        
+        // 2
+        // SKPhysicsContact does not guarantee which physics body will be in bodyA and bodyB.
+        //  this line figures out which one is not the player node
+        let whichNode = (contact.bodyA.node != player) ? contact.bodyA.node : contact.bodyB.node
+        let other = whichNode as! GameObjectNode
+        
+        // 3
+        // Call collisionWithPlayer once identified which object is not the player
+        updateHUD = other.collisionWithPlayer(player)
+        
+        // Update the HUD if necessary
+        if updateHUD {
+            // 4 TODO: Update HUD in Part 2
+        }
     }
 
     
