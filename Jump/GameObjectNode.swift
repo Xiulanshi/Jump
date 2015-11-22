@@ -45,12 +45,21 @@ class StarNode: GameObjectNode {
     // Store the starType
     var starType: StarType!
     
+    // Add the starSound property
+    let starSound = SKAction.playSoundFileNamed("StarPing.wav", waitForCompletion: false)
+    
     override func collisionWithPlayer(player: SKNode) -> Bool {
         // Boost the player up
         player.physicsBody?.velocity = CGVector(dx: player.physicsBody!.velocity.dx, dy: 400.0)
         
-        // Remove this Star
-        self.removeFromParent()
+//        // Remove this Star
+//        self.removeFromParent()
+        
+        // Play sound
+        runAction(starSound, completion: {
+            // Remove this Star
+            self.removeFromParent()
+        })
         
         // The HUD needs updating to show the new stars and score
         return true
