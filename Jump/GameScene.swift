@@ -60,6 +60,10 @@ class GameScene: SKScene {
         hudNode = SKNode()
         addChild(hudNode)
         
+        // Add a star
+        let star = createStarAtPosition(CGPoint(x: 160, y: 220))
+        foregroundNode.addChild(star)
+        
         // Add the player
         player = createPlayer()
         foregroundNode.addChild(player)
@@ -158,6 +162,31 @@ class GameScene: SKScene {
         // 4
         // Give the player node an initial upward impulse to get them started
         player.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 20.0))
+    }
+    
+    func createStarAtPosition(position: CGPoint) -> StarNode {
+        // 1
+        // instantiate StarNode and set it position
+        let node = StarNode()
+        let thePosition = CGPoint(x: position.x * scaleFactor, y: position.y)
+        node.position = thePosition
+        node.name = "NODE_STAR"
+        
+        // 2
+        // Assign the star's graphic using an SKSpriteNode mode
+        var sprite: SKSpriteNode
+        sprite = SKSpriteNode(imageNamed: "Star")
+        node.addChild(sprite)
+        
+        // 3
+        // Give the node a circular physics body – use it for collision detection with other objects in the game.
+        node.physicsBody = SKPhysicsBody(circleOfRadius: sprite.size.width / 2)
+        
+        // 4
+        // Make the physics body static, because don’t want gravity or any other physics simulation to influence the stars.
+        node.physicsBody?.dynamic = false
+        
+        return node
     }
 
     
