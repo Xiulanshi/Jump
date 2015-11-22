@@ -9,6 +9,9 @@
 import SpriteKit
 
 class GameScene: SKScene {
+    // Tap To Start node
+    let tapToStartNode = SKSpriteNode(imageNamed: "TapToStart")
+    
     // Layered Nodes
     
     // Background: a slow-moving layer that shows the distant landscape.
@@ -53,9 +56,17 @@ class GameScene: SKScene {
         foregroundNode = SKNode()
         addChild(foregroundNode)
         
+        // HUD
+        hudNode = SKNode()
+        addChild(hudNode)
+        
         // Add the player
         player = createPlayer()
         foregroundNode.addChild(player)
+        
+        // Tap to Start
+        tapToStartNode.position = CGPoint(x: self.size.width / 2, y: 180.0)
+        hudNode.addChild(tapToStartNode)
         
     }
     
@@ -110,7 +121,10 @@ class GameScene: SKScene {
         
         // 2
         // Physics bodies can be static or dynamic. Dynamic bodies are influenced by the physics engine and are thus affected by forces and impulses. Static bodies are not, but can still use them in collision detection. A static body such as a wall or a solid platform will never move, but things can bump into it. Since we want the player node to be affected by gravity, you set its dynamic property to true.
-        playerNode.physicsBody?.dynamic = true
+       // playerNode.physicsBody?.dynamic = true
+        
+        // change it to false
+        playerNode.physicsBody?.dynamic = false
         
         // 3
         // the player node need to remain upright at all times and so disable rotation of the node.
