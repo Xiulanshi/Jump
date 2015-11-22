@@ -48,7 +48,7 @@ class GameScene: SKScene {
     
     func createBackgroundNode() -> SKNode {
         // 1 
-        // Create the node. SKNode’s have no visual content, but do have a position in the scene. This means you can move the node around and its child nodes will move with it.
+        // Create the background node. SKNode’s have no visual content, but do have a position in the scene. This means you can move the node around and its child nodes will move with it.
 
         let backgroundNode = SKNode()
         let ySpacing = 64.0 * scaleFactor
@@ -75,5 +75,20 @@ class GameScene: SKScene {
         // 6
         // Return the completed background node
         return backgroundNode
+    }
+    
+    // Second add the player node
+    
+    func createPlayer() -> SKNode {
+        
+        // create the player node and position the player horizontally centered and just above the bottom of the scene
+        let playerNode = SKNode()
+        playerNode.position = CGPoint(x: self.size.width / 2, y: 80.0)
+        
+        // add the SKSpriteNode containing the player sprite to it as a child.
+        let sprite = SKSpriteNode(imageNamed: "Player")
+        playerNode.addChild(sprite)
+        
+        return playerNode
     }
 }
